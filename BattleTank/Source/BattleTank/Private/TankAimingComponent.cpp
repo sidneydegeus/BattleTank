@@ -19,14 +19,22 @@ void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet) {
 	Barrel = BarrelToSet;
 }
 
-void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
-	if (!Barrel)
-		return;
+//static void PrintWarning(FString Message) {
+//	UE_LOG(LogTemp, Warning, TEXT("%s on Line %d -> %s"), *FString(__FILE__), __LINE__, *Message);
+//}
 
+void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
+	if (!Barrel) {
+		//UE_LOG(LogTemp, Warning, TEXT("%s on Line %d: a"), *FString(__FILE__), __LINE__);
+		//PrintWarning(FString("No Barrel Found"));
+		return;
+	}
+
+	//UE_LOG(LogTemp, Warning, TEXT("%s %s: test"), __FILE__, __LINE__);
 	FVector OutLaunchVelocity(0);
 	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
 
-	bool result = UGameplayStatics::SuggestProjectileVelocity(
+	bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(
 		this,
 		OutLaunchVelocity,
 		StartLocation,
@@ -35,9 +43,13 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
 		ESuggestProjVelocityTraceOption::DoNotTrace
 	);
 
-	if (result) {
+	if (bHaveAimSolution) {
 		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
 		MoveBarrelTowards(AimDirection);
+		UE_LOG(LogTemp, Warning, TEXT("Aim solution found"));
+	}
+	else {
+		UE_LOG(LogTemp, Warning, TEXT("No Aim solution found"));
 	}
 }
 

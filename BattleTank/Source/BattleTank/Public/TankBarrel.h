@@ -27,5 +27,5 @@ private:
 
 //Functions
 public:
-	void Elevate(float DegreesPerSecond);
+	void Elevate(float RelativeSpeed);
 };
