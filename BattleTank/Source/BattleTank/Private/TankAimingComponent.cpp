@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankAimingComponent.h"
+#include "StaticLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "TankBarrel.h"
 
@@ -19,14 +20,11 @@ void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet) {
 	Barrel = BarrelToSet;
 }
 
-//static void PrintWarning(FString Message) {
-//	UE_LOG(LogTemp, Warning, TEXT("%s on Line %d -> %s"), *FString(__FILE__), __LINE__, *Message);
-//}
 
 void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
 	if (!Barrel) {
 		//UE_LOG(LogTemp, Warning, TEXT("%s on Line %d: a"), *FString(__FILE__), __LINE__);
-		//PrintWarning(FString("No Barrel Found"));
+		UStaticLibrary::PrintWarning(FString("No Barrel Found"), FString(__FILE__), __LINE__);
 		return;
 	}
 
