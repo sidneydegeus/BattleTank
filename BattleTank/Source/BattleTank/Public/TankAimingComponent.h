@@ -22,7 +22,6 @@ private:
 
 // functions
 public:	
-	// Sets default values for this component's properties
 	UTankAimingComponent();
 
 	void SetBarrelReference(UTankBarrel* BarrelToSet);

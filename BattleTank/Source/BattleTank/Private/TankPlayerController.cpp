@@ -74,7 +74,6 @@ bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVec
 		//DrawDebugLine(GetWorld(), StartLocation, HitLocation, FColor::Green, false, 1, 0, 1); //
 		return true;
 	}
-	//HitLocation = FVector(0); // THIS IS THE ISSUE
 	HitLocation = EndLocation;
 	//DrawDebugLine(GetWorld(), StartLocation, HitLocation, FColor::Red, false, 1, 0, 1); //
 	return false;

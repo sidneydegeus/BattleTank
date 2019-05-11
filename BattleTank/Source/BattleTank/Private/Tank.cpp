@@ -2,6 +2,7 @@
 
 
 #include "Tank.h"
+#include "StaticLibrary.h"
 #include "TankBarrel.h"
 
 // Sets default values
@@ -29,5 +30,9 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent){
 
 void ATank::AimAt(FVector HitLocation) {
 	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
+}
+
+void ATank::Fire() {
+	UStaticLibrary::PrintWarning(FString("Firing!!"), FString(__FILE__), __LINE__);
 }
 

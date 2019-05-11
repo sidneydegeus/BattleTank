@@ -6,15 +6,8 @@
 #include "TankBarrel.h"
 #include "TankTurret.h"
 
-
-// Sets default values for this component's properties
-UTankAimingComponent::UTankAimingComponent()
-{
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
+UTankAimingComponent::UTankAimingComponent() {
+	PrimaryComponentTick.bCanEverTick = false;
 }
 
 void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet) {
@@ -53,14 +46,9 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
 	);
 
 
-	auto Time = GetWorld()->GetTimeSeconds();
 	if (bHaveAimSolution) {
 		auto AimDirection = OutLaunchVelocity.GetSafeNormal();
 		MoveBarrelTowards(AimDirection);
-		UE_LOG(LogTemp, Warning, TEXT("%f: Aim solution found: %s"), Time, *AimDirection.ToString());
-	}
-	else {
-		UE_LOG(LogTemp, Warning, TEXT("%f: No Aim solution found"), Time);
 	}
 }
 
