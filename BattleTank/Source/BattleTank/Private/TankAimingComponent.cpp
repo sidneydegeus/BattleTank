@@ -23,12 +23,10 @@ void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet) {
 
 void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed) {
 	if (!Barrel) {
-		//UE_LOG(LogTemp, Warning, TEXT("%s on Line %d: a"), *FString(__FILE__), __LINE__);
 		UStaticLibrary::PrintWarning(FString("No Barrel Found"), FString(__FILE__), __LINE__);
 		return;
 	}
 
-	//UE_LOG(LogTemp, Warning, TEXT("%s %s: test"), __FILE__, __LINE__);
 	FVector OutLaunchVelocity(0);
 	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
 
