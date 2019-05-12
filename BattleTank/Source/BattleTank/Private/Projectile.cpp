@@ -21,7 +21,7 @@ void AProjectile::Tick(float DeltaTime){
 }
 
 void AProjectile::LaunchProjectile(float Speed) {
-	UStaticLibrary::PrintWarning(FString("Firing!!"), FString(__FILE__), __LINE__);
+	//UStaticLibrary::PrintWarning(FString("Firing!!"), FString(__FILE__), __LINE__);
 	ProjectileMovement->SetVelocityInLocalSpace(FVector::ForwardVector * Speed);
 	ProjectileMovement->Activate();
 }
