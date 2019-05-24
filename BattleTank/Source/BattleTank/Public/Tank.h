@@ -2,13 +2,14 @@
 
 #pragma once
 
-#include "TankAimingComponent.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "Tank.generated.h"
 
 class UTankBarrel;
 class UTankTurret;
+class UTankAimingComponent;
+class UTankMovementComponent;
 class AProjectile;
 
 UCLASS()
@@ -30,6 +31,12 @@ private:
 	double LastFireTime = 0;
 
 	UTankBarrel* Barrel = nullptr;
+
+protected:
+	UTankAimingComponent* TankAimingComponent = nullptr;
+
+	//UPROPERTY(BlueprintReadOnly)
+	//	UTankMovementComponent* TankMovementComponent = nullptr;
 
 //Functions
 public:
@@ -56,8 +63,6 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	UTankAimingComponent* TankAimingComponent = nullptr;
 
 
 };
