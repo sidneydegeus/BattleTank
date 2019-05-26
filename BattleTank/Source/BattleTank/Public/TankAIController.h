@@ -6,6 +6,8 @@
 #include "AIController.h"
 #include "TankAIController.generated.h"
 
+class UTankAimingComponent;
+
 /**
  * 
  */
@@ -19,6 +21,8 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = Setup)
 		float AcceptanceRadius = 3000;
 
+	APawn* ControlledTank = nullptr;
+	UTankAimingComponent* TankAimingComponent = nullptr;
 // Functions
 public:
 	virtual void Tick(float DeltaTime) override;

@@ -25,6 +25,8 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	float LineTraceRange = 1000000;
 
+	UTankAimingComponent* TankAimingComponent = nullptr;
+
 // functions
 public:
 	virtual void Tick(float DeltaTime) override;
