@@ -39,10 +39,11 @@ private:
 		TSubclassOf<AProjectile> ProjectileBlueprint;
 
 	double LastFireTime = 0;
+	FVector AimDirection;
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category = "State")
-		EFiringState FiringState = EFiringState::Aiming;
+		EFiringState FiringState = EFiringState::Reloading;
 
 // Functions
 public:	
@@ -56,5 +57,8 @@ public:
 
 private:
 	UTankAimingComponent();
+	virtual void BeginPlay() override;
+	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	void MoveBarrelTowards(FVector AimDirection);	
+	bool IsBarrelMoving();
 };
