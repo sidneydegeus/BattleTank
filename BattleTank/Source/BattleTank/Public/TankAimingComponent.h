@@ -11,7 +11,8 @@ enum class EFiringState : uint8
 {
 	Reloading,
 	Aiming,
-	Locked
+	Locked,
+	NoAmmo
 };
 
 class UTankBarrel;
@@ -24,10 +25,10 @@ class BATTLETANK_API UTankAimingComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-// Variables
-private:
-	UTankBarrel* Barrel = nullptr;
-	UTankTurret* Turret = nullptr;
+// Variables	
+protected:
+	UPROPERTY(BlueprintReadOnly, Category = "State")
+		EFiringState FiringState = EFiringState::Reloading;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 		float LaunchSpeed = 100000;
@@ -38,22 +39,28 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
 		TSubclassOf<AProjectile> ProjectileBlueprint;
 
+private:
+	UTankBarrel* Barrel = nullptr;
+	UTankTurret* Turret = nullptr;
+
 	double LastFireTime = 0;
 	FVector AimDirection;
-
-protected:
-	UPROPERTY(BlueprintReadOnly, Category = "State")
-		EFiringState FiringState = EFiringState::Reloading;
+	int Ammo = 3;
 
 // Functions
 public:	
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 		void Initialize(UTankBarrel* TankBarrelToSet, UTankTurret* TankTurretToSet);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Firing")
 		void Fire();
 
+	UFUNCTION(BlueprintCallable, Category = "Firing")
+		int GetAmmo() const;
+
 	void AimAt(FVector HitLocation);
+	EFiringState GetFiringState() const;
+
 
 private:
 	UTankAimingComponent();
