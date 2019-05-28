@@ -15,13 +15,18 @@ class BATTLETANK_API AProjectile : public AActor
 
 //Variables
 private:
-	UProjectileMovementComponent* ProjectileMovement = nullptr;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+		UStaticMeshComponent* CollisionMesh = nullptr;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+		UParticleSystemComponent* LaunchBlast = nullptr;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+		UProjectileMovementComponent* ProjectileMovement = nullptr;
 
 public:	
 	AProjectile();
-
 	virtual void Tick(float DeltaTime) override;
-
 	void LaunchProjectile(float Speed);
 
 protected:

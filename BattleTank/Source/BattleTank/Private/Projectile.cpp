@@ -3,10 +3,22 @@
 #include "Projectile.h"
 #include "StaticLibrary.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Classes/Particles/ParticleSystemComponent.h"
+
+//needed to remove intellisense errors. Compiles without as well.
+#include "Classes/Components/StaticMeshComponent.h"
 
 // Sets default values
 AProjectile::AProjectile(){
 	PrimaryActorTick.bCanEverTick = true;
+
+	CollisionMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("Collision Mesh"));
+	SetRootComponent(CollisionMesh);
+	CollisionMesh->SetNotifyRigidBodyCollision(true);
+	CollisionMesh->SetVisibility(false);
+
+	LaunchBlast = CreateDefaultSubobject<UParticleSystemComponent>(FName("Launch Blast"));
+
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(FName("Projectile Movement"));
 	ProjectileMovement->bAutoActivate = false;
 }

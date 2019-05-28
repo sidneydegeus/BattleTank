@@ -5,6 +5,9 @@
 #include "DrawDebugHelpers.h"
 #include "TankAimingComponent.h"
 
+//needed to remove intellisense errors. Compiles without as well.
+#include "Engine/World.h"
+
 void ATankPlayerController::BeginPlay() {
 	Super::BeginPlay();
 
