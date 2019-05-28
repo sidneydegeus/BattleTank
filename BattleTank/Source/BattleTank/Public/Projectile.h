@@ -22,14 +22,20 @@ private:
 		UParticleSystemComponent* LaunchBlast = nullptr;
 
 	UPROPERTY(VisibleAnywhere, Category = "Components")
+		UParticleSystemComponent* ImpactBlast = nullptr;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
 		UProjectileMovementComponent* ProjectileMovement = nullptr;
 
+//Functions
 public:	
 	AProjectile();
-	virtual void Tick(float DeltaTime) override;
 	void LaunchProjectile(float Speed);
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UFUNCTION()
+		void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 };
