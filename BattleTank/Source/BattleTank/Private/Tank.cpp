@@ -4,15 +4,13 @@
 #include "Tank.h"
 #include "StaticLibrary.h"
 
-// Sets default values
 ATank::ATank() {
 	PrimaryActorTick.bCanEverTick = false;
-	//TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
 }
 
 void ATank::BeginPlay() {
 	Super::BeginPlay();
-	//TankAimingComponent = FindComponentByClass<UTankAimingComponent>();
+	CurrentHealth = MaxHealth;
 }
 
 float ATank::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser) {
@@ -20,6 +18,9 @@ float ATank::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, cl
 	int32 DamageToApply = FMath::Clamp(DamagePoints, 0, CurrentHealth);
 	
 	CurrentHealth -= DamageToApply;
+	if (CurrentHealth <= 0) {
+		OnDeath.Broadcast();
+	}
 
 	return DamageToApply;
 }

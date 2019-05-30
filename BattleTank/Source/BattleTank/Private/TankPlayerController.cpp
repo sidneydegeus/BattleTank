@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TankPlayerController.h"
-#include "StaticLibrary.h"
 #include "DrawDebugHelpers.h"
 #include "TankAimingComponent.h"
+#include "Tank.h"
 
 //needed to remove intellisense errors. Compiles without as well.
 #include "Engine/World.h"
@@ -73,4 +73,18 @@ bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVec
 	HitLocation = EndLocation;
 	//DrawDebugLine(GetWorld(), StartLocation, HitLocation, FColor::Red, false, 1, 0, 1); //
 	return false;
+}
+
+void ATankPlayerController::SetPawn(APawn* InPawn) {
+	Super::SetPawn(InPawn);
+	if (InPawn) {
+		auto PossessedTank = Cast<ATank>(InPawn);
+		if (!ensure(PossessedTank)) return;
+
+		PossessedTank->OnDeath.AddUniqueDynamic(this, &ATankPlayerController::OnPossessedTankDeath);
+	}
+}
+
+void ATankPlayerController::OnPossessedTankDeath() {
+	StartSpectatingOnly();
 }
