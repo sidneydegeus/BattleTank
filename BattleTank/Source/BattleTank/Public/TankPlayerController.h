@@ -25,7 +25,8 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	float LineTraceRange = 1000000;
 
-	UTankAimingComponent* TankAimingComponent = nullptr;
+	UPROPERTY()
+		UTankAimingComponent* TankAimingComponent = nullptr;
 
 // functions
 public:
@@ -34,12 +35,10 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-
 	UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
 		void FoundAimingComponent(UTankAimingComponent* AimingComponentReference);
 
 private:
-
 	void AimTowardsCrosshair();
 	bool GetSightRayHitLocation(FVector& OutHitLocation) const;
 	bool GetLookDirection(FVector2D ScreenLocation, FVector& LookDirection) const;
