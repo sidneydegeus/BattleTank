@@ -14,18 +14,18 @@ class BATTLETANK_API ASprungWheel : public AActor
 //Variables
 private:
 	// Components
-	//UPROPERTY(VisibleAnywhere, Category = "Components")
-	//	USphereComponent* Wheel = nullptr;
-	//UPROPERTY(VisibleAnywhere, Category = "Components")
-	//	USphereComponent* Axle = nullptr;
-	//UPROPERTY(VisibleAnywhere, Category = "Components")
-	//	UPhysicsConstraintComponent* MassWheelConstraint = nullptr;
-	//UPROPERTY(VisibleAnywhere, Category = "Components")
-	//	UPhysicsConstraintComponent* AxleWheelConstraint = nullptr;
 	UPROPERTY(VisibleAnywhere, Category = "Components")
-		class UStaticMeshComponent* Wheel = nullptr;
+		class USphereComponent* Wheel = nullptr;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+		class USphereComponent* Axle = nullptr;
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 		class UPhysicsConstraintComponent* MassWheelConstraint = nullptr;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+		class UPhysicsConstraintComponent* AxleWheelConstraint = nullptr;
+	//UPROPERTY(VisibleAnywhere, Category = "Components")
+	//	class UStaticMeshComponent* Wheel = nullptr;
+	//UPROPERTY(VisibleAnywhere, Category = "Components")
+	//	class UPhysicsConstraintComponent* MassWheelConstraint = nullptr;
 
 	float TotalForceMagnitudeThisFrame = 0;
 
