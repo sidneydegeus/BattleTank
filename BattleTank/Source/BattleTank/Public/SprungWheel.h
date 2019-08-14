@@ -22,10 +22,6 @@ private:
 		class UPhysicsConstraintComponent* MassWheelConstraint = nullptr;
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 		class UPhysicsConstraintComponent* AxleWheelConstraint = nullptr;
-	//UPROPERTY(VisibleAnywhere, Category = "Components")
-	//	class UStaticMeshComponent* Wheel = nullptr;
-	//UPROPERTY(VisibleAnywhere, Category = "Components")
-	//	class UPhysicsConstraintComponent* MassWheelConstraint = nullptr;
 
 	float TotalForceMagnitudeThisFrame = 0;
 
