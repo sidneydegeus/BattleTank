@@ -16,14 +16,20 @@ class BATTLETANK_API UTankTrack : public UStaticMeshComponent
 
 // Variables
 public:
+	// Max force per track, in Newtons
+	UPROPERTY(EditDefaultsOnly)
+		float TrackMaxDrivingForce = 40000000;
+
+// Functions
+public:
 	UFUNCTION(BlueprintCallable, Category = Input)
 		void SetThrottle(float Throttle);
 
-	// Max force per track, in Newtons
-	UPROPERTY(EditDefaultsOnly)
-		float TrackMaxDrivingForce = 400000;
+	UFUNCTION(Server, Reliable, WithValidation)
+		void Server_SetThrottle(float Throttle);
+		void Server_SetThrottle_Implementation(float Throttle);
+		bool Server_SetThrottle_Validate(float Throttle);
 
-// Functions
 private:
 	UTankTrack();
 	void DriveTrack(float CurrentThrottle);

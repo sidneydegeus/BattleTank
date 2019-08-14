@@ -5,7 +5,6 @@
 #include "TankAimingComponent.h"
 #include "Tank.h"
 
-//needed to remove intellisense errors. Compiles without as well.
 #include "Engine/World.h"
 
 void ATankPlayerController::BeginPlay() {
@@ -23,7 +22,7 @@ void ATankPlayerController::Tick(float DeltaTime) {
 }
 
 void ATankPlayerController::AimTowardsCrosshair() {
-	if (!ensure(TankAimingComponent)) return;
+	if (!TankAimingComponent) return;
 	
 	FVector HitLocation;
 	if (GetSightRayHitLocation(HitLocation)) {

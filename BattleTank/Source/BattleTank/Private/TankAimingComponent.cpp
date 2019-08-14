@@ -14,6 +14,10 @@ void UTankAimingComponent::Initialize(UTankBarrel* TankBarrelToSet, UTankTurret*
 }
 
 void UTankAimingComponent::Fire() {
+	Server_Fire();
+}
+
+void UTankAimingComponent::Server_Fire_Implementation() {
 	if (FiringState == EFiringState::Locked || FiringState == EFiringState::Aiming) {
 		if (!ensure(Barrel && ProjectileBlueprint)) return;
 		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
@@ -26,6 +30,10 @@ void UTankAimingComponent::Fire() {
 		LastFireTime = FPlatformTime::Seconds();
 		Ammo--;
 	}
+}
+
+bool UTankAimingComponent::Server_Fire_Validate() {
+	return true;
 }
 
 void UTankAimingComponent::AimAt(FVector HitLocation) {
@@ -52,7 +60,8 @@ void UTankAimingComponent::AimAt(FVector HitLocation) {
 
 	if (bHaveAimSolution) {
 		AimDirection = OutLaunchVelocity.GetSafeNormal();
-		MoveBarrelTowards(AimDirection);
+		Server_MoveBarrelTowards(AimDirection);
+		//MoveBarrelTowards(AimDirection);
 	}
 }
 
@@ -89,9 +98,9 @@ void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickTy
 	else {
 		FiringState = EFiringState::Locked;
 	}
-}
+} 
 
-void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
+void UTankAimingComponent::Server_MoveBarrelTowards_Implementation(FVector AimDirection) {
 	if (!ensure(Barrel || Turret)) return;
 
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
@@ -106,6 +115,10 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
 	else { // avoid going long-way around
 		Turret->Rotate(-DeltaRotator.Yaw);
 	}
+}
+
+bool UTankAimingComponent::Server_MoveBarrelTowards_Validate(FVector AimDirection) {
+	return true;
 }
 
 bool UTankAimingComponent::IsBarrelMoving() {

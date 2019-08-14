@@ -6,8 +6,16 @@
 #include "SpawnPoint.h"
 
 void UTankTrack::SetThrottle(float Throttle) {
+	Server_SetThrottle(Throttle);
+}
+
+void UTankTrack::Server_SetThrottle_Implementation(float Throttle) {
 	float CurrentThrottle = FMath::Clamp<float>(Throttle, -1, 1);
 	DriveTrack(CurrentThrottle);
+}
+
+bool UTankTrack::Server_SetThrottle_Validate(float Throttle) {
+	return true;
 }
 
 UTankTrack::UTankTrack() {

@@ -57,6 +57,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Firing")
 		void Fire();
 
+	UFUNCTION(Server, Reliable, WithValidation)
+		void Server_Fire();
+		void Server_Fire_Implementation();
+		bool Server_Fire_Validate();
+
 	UFUNCTION(BlueprintCallable, Category = "Firing")
 		int32 GetAmmo() const;
 
@@ -68,6 +73,11 @@ private:
 	UTankAimingComponent();
 	virtual void BeginPlay() override;
 	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	void MoveBarrelTowards(FVector AimDirection);	
+	
+	UFUNCTION(Server, Reliable, WithValidation)
+		void Server_MoveBarrelTowards(FVector AimDirection);
+		void Server_MoveBarrelTowards_Implementation(FVector AimDirection);
+		bool Server_MoveBarrelTowards_Validate(FVector AimDirection);
+
 	bool IsBarrelMoving();
 };
