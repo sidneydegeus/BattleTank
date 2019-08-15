@@ -27,7 +27,7 @@ class BATTLETANK_API UTankAimingComponent : public UActorComponent
 
 // Variables	
 protected:
-	UPROPERTY(BlueprintReadOnly, Category = "State")
+	UPROPERTY(BlueprintReadOnly, Replicated, Category = "State")
 		EFiringState FiringState = EFiringState::Reloading;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
@@ -36,7 +36,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 		float ReloadTimeInSeconds = 3;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Firing")
+	UPROPERTY(EditDefaultsOnly, Replicated, Category = "Firing")
 		int32 Ammo = 3;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Setup")
@@ -47,6 +47,7 @@ private:
 	UTankTurret* Turret = nullptr;
 
 	double LastFireTime = 0;
+
 	FVector AimDirection;
 
 // Functions
@@ -68,6 +69,8 @@ public:
 	void AimAt(FVector HitLocation);
 	EFiringState GetFiringState() const;
 
+protected:
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const;
 
 private:
 	UTankAimingComponent();

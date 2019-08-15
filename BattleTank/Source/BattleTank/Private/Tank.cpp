@@ -2,7 +2,8 @@
 
 
 #include "Tank.h"
-#include "StaticLibrary.h"
+#include "Engine.h"
+#include "TankAimingComponent.h"
 
 ATank::ATank() {
 	PrimaryActorTick.bCanEverTick = false;

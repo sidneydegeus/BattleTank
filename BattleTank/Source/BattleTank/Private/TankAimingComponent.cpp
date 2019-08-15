@@ -7,6 +7,8 @@
 #include "TankTurret.h"
 #include "Projectile.h"
 
+#include "Net/UnrealNetwork.h"
+
 #pragma region PUBLIC
 void UTankAimingComponent::Initialize(UTankBarrel* TankBarrelToSet, UTankTurret* TankTurretToSet) {
 	Barrel = TankBarrelToSet;
@@ -14,26 +16,26 @@ void UTankAimingComponent::Initialize(UTankBarrel* TankBarrelToSet, UTankTurret*
 }
 
 void UTankAimingComponent::Fire() {
-	Server_Fire();
-}
-
-void UTankAimingComponent::Server_Fire_Implementation() {
 	if (FiringState == EFiringState::Locked || FiringState == EFiringState::Aiming) {
-		if (!ensure(Barrel && ProjectileBlueprint)) return;
-		auto Projectile = GetWorld()->SpawnActor<AProjectile>(
-			ProjectileBlueprint,
-			Barrel->GetSocketLocation(FName("Projectile")),
-			Barrel->GetSocketRotation(FName("Projectile"))
-			);
-
-		Projectile->LaunchProjectile(LaunchSpeed);
-		LastFireTime = FPlatformTime::Seconds();
-		Ammo--;
+		Server_Fire();
 	}
 }
 
+void UTankAimingComponent::Server_Fire_Implementation() {
+	if (!ensure(Barrel && ProjectileBlueprint)) return;
+	auto Projectile = GetWorld()->SpawnActor<AProjectile>(
+		ProjectileBlueprint,
+		Barrel->GetSocketLocation(FName("Projectile")),
+		Barrel->GetSocketRotation(FName("Projectile"))
+		);
+
+	Projectile->LaunchProjectile(LaunchSpeed);
+	Ammo--;
+	LastFireTime = FPlatformTime::Seconds();
+}
+
 bool UTankAimingComponent::Server_Fire_Validate() {
-	return true;
+	return (Ammo > 0);
 }
 
 void UTankAimingComponent::AimAt(FVector HitLocation) {
@@ -75,30 +77,46 @@ int32 UTankAimingComponent::GetAmmo() const {
 
 #pragma endregion PUBLIC
 
+#pragma region PROTECTED
+void UTankAimingComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const {
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(UTankAimingComponent, Ammo);
+	DOREPLIFETIME(UTankAimingComponent, FiringState);
+}
+#pragma endregion PROTECTED
+
 #pragma region PRIVATE
 UTankAimingComponent::UTankAimingComponent() {
 	PrimaryComponentTick.bCanEverTick = true;
+	bReplicates = true;
 }
 
 void UTankAimingComponent::BeginPlay() {
-	LastFireTime = FPlatformTime::Seconds();
+	Super::BeginPlay();
+	if (GetOwner()->Role == ROLE_Authority) {
+		LastFireTime = FPlatformTime::Seconds();
+	}
 }
 
 void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	if (Ammo <= 0) {
-		FiringState = EFiringState::NoAmmo;
+	
+	if (GetOwner()->Role == ROLE_Authority) {
+		if (Ammo <= 0) {
+			FiringState = EFiringState::NoAmmo;
+		}
+		else if ((FPlatformTime::Seconds() - LastFireTime) < ReloadTimeInSeconds) {
+			FiringState = EFiringState::Reloading;
+		}
+		else if (IsBarrelMoving()) {
+			FiringState = EFiringState::Aiming;
+		}
+		else {
+			FiringState = EFiringState::Locked;
+		}
 	}
-	else if ((FPlatformTime::Seconds() - LastFireTime) < ReloadTimeInSeconds) {
-		FiringState = EFiringState::Reloading;
-	}
-	else if (IsBarrelMoving()) {
-		FiringState = EFiringState::Aiming;
-	}
-	else {
-		FiringState = EFiringState::Locked;
-	}
-} 
+}
 
 void UTankAimingComponent::Server_MoveBarrelTowards_Implementation(FVector AimDirection) {
 	if (!ensure(Barrel || Turret)) return;
@@ -122,7 +140,7 @@ bool UTankAimingComponent::Server_MoveBarrelTowards_Validate(FVector AimDirectio
 }
 
 bool UTankAimingComponent::IsBarrelMoving() {
-	if (!ensure(Barrel)) return false; 
+	if (!ensure(Barrel)) return false;
 	auto BarrelForward = Barrel->GetForwardVector();
 	return !BarrelForward.Equals(AimDirection, 0.01);
 }
