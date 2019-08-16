@@ -56,6 +56,7 @@ void ASprungWheel::AddDrivingForce(float ForceMagnitude) {
 	TotalForceMagnitudeThisFrame += ForceMagnitude;
 }
 
+// TODO: maybe disable? idk
 void ASprungWheel::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit) {
 	if (TotalForceMagnitudeThisFrame == 0) {
 		Wheel->SetAngularDamping(500);

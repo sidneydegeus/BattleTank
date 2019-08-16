@@ -45,7 +45,7 @@ void AProjectile::LaunchProjectile(float Speed) {
 	ProjectileMovement->Activate();
 }
 
-void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit) {
+void AProjectile::ResolveHit_Implementation() {
 	LaunchBlast->Deactivate();
 	ImpactBlast->Activate();
 	ExplosionForce->FireImpulse();
@@ -53,17 +53,23 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, U
 	SetRootComponent(ImpactBlast);
 	CollisionMesh->DestroyComponent();
 
-	UGameplayStatics::ApplyRadialDamage(
-		this,
-		ProjectileDamage,
-		GetActorLocation(),
-		ExplosionForce->Radius,
-		UDamageType::StaticClass(),
-		TArray<AActor*>()
-	);
-
 	FTimerHandle Timer;
 	GetWorld()->GetTimerManager().SetTimer(Timer, this, &AProjectile::OnTimerExpire, DestroyDelay, false);
+}
+
+void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit) {
+	ResolveHit();
+
+	if (HasAuthority()) {
+		UGameplayStatics::ApplyRadialDamage(
+			this,
+			ProjectileDamage,
+			GetActorLocation(),
+			ExplosionForce->Radius,
+			UDamageType::StaticClass(),
+			TArray<AActor*>()
+		);
+	}
 }
 
 void AProjectile::OnTimerExpire() {
