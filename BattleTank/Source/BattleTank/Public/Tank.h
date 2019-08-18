@@ -20,6 +20,12 @@ private:
 
 	int32 CurrentHealth;
 
+	UPROPERTY(Replicated)
+		FVector ReplicatedLocation;
+
+	UPROPERTY(Replicated)
+		FRotator ReplicatedRotation;
+
 //Functions
 public:
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser) override;
@@ -27,10 +33,13 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Health")
 		float GetHealthPercentage() const;
 
-	//UFUNCTION()
 	FTankDelegate OnDeath;
+
+protected:
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const;
 
 private:
 	ATank();
 	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaTime) override;
 };

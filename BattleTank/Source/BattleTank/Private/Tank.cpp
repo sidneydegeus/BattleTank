@@ -5,13 +5,37 @@
 #include "Engine.h"
 #include "TankAimingComponent.h"
 
+#include "Net/UnrealNetwork.h"
+
+void ATank::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const {
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ATank, ReplicatedLocation);
+	DOREPLIFETIME(ATank, ReplicatedRotation);
+}
+
 ATank::ATank() {
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
+	bReplicates = true;
 }
 
 void ATank::BeginPlay() {
 	Super::BeginPlay();
 	CurrentHealth = MaxHealth;
+}
+
+void ATank::Tick(float DeltaTime) {
+	Super::Tick(DeltaTime);
+
+	if (HasAuthority()) {
+		ReplicatedLocation = GetActorLocation();
+		ReplicatedRotation = GetActorRotation();
+		UE_LOG(LogTemp, Warning, TEXT("ss"));
+	}
+	else {
+		SetActorLocation(ReplicatedLocation);
+		SetActorRotation(ReplicatedRotation);
+	}
 }
 
 float ATank::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser) {

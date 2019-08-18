@@ -30,6 +30,10 @@ public:
 		void Server_SetThrottle_Implementation(float Throttle);
 		bool Server_SetThrottle_Validate(float Throttle);
 
+	UFUNCTION(NetMulticast, Reliable)
+		void Multicast_SetThrottle(float Throttle);
+		void Multicast_SetThrottle_Implementation(float Throttle);
+
 private:
 	UTankTrack();
 	void DriveTrack(float CurrentThrottle);

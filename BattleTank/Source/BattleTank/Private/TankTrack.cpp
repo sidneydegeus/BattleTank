@@ -6,18 +6,28 @@
 #include "SpawnPoint.h"
 
 void UTankTrack::SetThrottle(float Throttle) {
+	if (GetOwner()->Role < ROLE_Authority) {
+		Server_SetThrottle(Throttle);
+	}
+	if (GetOwner()->Role == ROLE_Authority) {
+		Multicast_SetThrottle(Throttle);
+	}
 	float CurrentThrottle = FMath::Clamp<float>(Throttle, -1, 1);
 	DriveTrack(CurrentThrottle);
-	Server_SetThrottle(Throttle);
 }
 
 void UTankTrack::Server_SetThrottle_Implementation(float Throttle) {
-	float CurrentThrottle = FMath::Clamp<float>(Throttle, -1, 1);
-	DriveTrack(CurrentThrottle);
+	SetThrottle(Throttle);
+	//Multicast_SetThrottle(Throttle);
 }
 
 bool UTankTrack::Server_SetThrottle_Validate(float Throttle) {
 	return true;
+}
+
+void UTankTrack::Multicast_SetThrottle_Implementation(float Throttle) {
+	float CurrentThrottle = FMath::Clamp<float>(Throttle, -1, 1);
+	DriveTrack(CurrentThrottle);
 }
 
 UTankTrack::UTankTrack() {
@@ -50,3 +60,4 @@ TArray<ASprungWheel*> UTankTrack::GetWheels() const {
 	}
 	return ResultArray;
 }
+

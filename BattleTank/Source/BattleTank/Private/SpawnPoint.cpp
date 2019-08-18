@@ -24,6 +24,9 @@ void USpawnPoint::BeginPlay() {
 	SpawnedActor = GetWorld()->SpawnActorDeferred<AActor>(SpawnClass, GetComponentTransform());
 	if (!SpawnedActor) return;
 	SpawnedActor->AttachToComponent(this, FAttachmentTransformRules::KeepWorldTransform);
+	if (GetOwner() != nullptr) {
+		SpawnedActor->SetOwner(GetOwner());
+	}
 	UGameplayStatics::FinishSpawningActor(SpawnedActor, GetComponentTransform());
 }
 

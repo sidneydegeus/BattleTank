@@ -17,9 +17,7 @@ void UTankAimingComponent::Initialize(UTankBarrel* TankBarrelToSet, UTankTurret*
 
 void UTankAimingComponent::Fire() {
 	if (FiringState == EFiringState::Locked || FiringState == EFiringState::Aiming) {
-		if (GetOwner()->Role < ROLE_Authority) {
-			Server_Fire();
-		}
+		Server_Fire();
 		FiringState = EFiringState::Reloading;
 	}
 }

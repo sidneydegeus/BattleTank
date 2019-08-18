@@ -29,7 +29,20 @@ ASprungWheel::ASprungWheel() {
 void ASprungWheel::BeginPlay() {
 	Super::BeginPlay();
 
-	//Wheel->MoveIgnoreActors.Add();
+	//
+	//AActor* Owner = GetOwner();
+	//if (Owner != nullptr) {
+	//	UE_LOG(LogTemp, Warning, TEXT("Owner %s"), *Owner->GetName());
+	//	//Wheel->MoveIgnoreActors.Add(Owner);
+	//	Wheel->IgnoreActorWhenMoving(Owner, true);
+	//	Wheel->
+	//	Wheel->IgnoreComponentWhenMoving(Owner->GetComponents);
+	//	//Axle->MoveIgnoreActors.Add(Owner);
+	//	Axle->IgnoreActorWhenMoving(Owner, true);
+	//}
+	//else {
+	//	UE_LOG(LogTemp, Warning, TEXT("no owner"));
+	//}
 
 	Wheel->SetNotifyRigidBodyCollision(true);
 	Wheel->OnComponentHit.AddDynamic(this, &ASprungWheel::OnHit);
