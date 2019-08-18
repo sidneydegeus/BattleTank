@@ -8,7 +8,7 @@
 void UTankTrack::SetThrottle(float Throttle) {
 	float CurrentThrottle = FMath::Clamp<float>(Throttle, -1, 1);
 	DriveTrack(CurrentThrottle);
-	//Server_SetThrottle(Throttle);
+	Server_SetThrottle(Throttle);
 }
 
 void UTankTrack::Server_SetThrottle_Implementation(float Throttle) {

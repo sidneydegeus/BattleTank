@@ -29,6 +29,8 @@ ASprungWheel::ASprungWheel() {
 void ASprungWheel::BeginPlay() {
 	Super::BeginPlay();
 
+	//Wheel->MoveIgnoreActors.Add();
+
 	Wheel->SetNotifyRigidBodyCollision(true);
 	Wheel->OnComponentHit.AddDynamic(this, &ASprungWheel::OnHit);
 

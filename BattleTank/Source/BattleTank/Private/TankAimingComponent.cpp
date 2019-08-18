@@ -62,8 +62,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation) {
 
 	if (bHaveAimSolution) {
 		AimDirection = OutLaunchVelocity.GetSafeNormal();
-		Server_MoveBarrelTowards(AimDirection);
-		//MoveBarrelTowards(AimDirection);
+		MoveBarrelTowards(AimDirection);
 	}
 }
 
@@ -118,7 +117,11 @@ void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickTy
 	}
 }
 
-void UTankAimingComponent::Server_MoveBarrelTowards_Implementation(FVector AimDirection) {
+void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection) {
+	if (GetOwner()->Role < ROLE_Authority) {
+		Server_MoveBarrelTowards(AimDirection);
+	}
+
 	if (!ensure(Barrel || Turret)) return;
 
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
@@ -133,6 +136,10 @@ void UTankAimingComponent::Server_MoveBarrelTowards_Implementation(FVector AimDi
 	else { // avoid going long-way around
 		Turret->Rotate(-DeltaRotator.Yaw);
 	}
+}
+
+void UTankAimingComponent::Server_MoveBarrelTowards_Implementation(FVector AimDirection) {
+	MoveBarrelTowards(AimDirection);
 }
 
 bool UTankAimingComponent::Server_MoveBarrelTowards_Validate(FVector AimDirection) {
