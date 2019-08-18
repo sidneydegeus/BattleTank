@@ -30,7 +30,6 @@ void ATank::Tick(float DeltaTime) {
 	if (HasAuthority()) {
 		ReplicatedLocation = GetActorLocation();
 		ReplicatedRotation = GetActorRotation();
-		UE_LOG(LogTemp, Warning, TEXT("ss"));
 	}
 	else {
 		SetActorLocation(ReplicatedLocation);

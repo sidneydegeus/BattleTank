@@ -6,6 +6,14 @@
 #include "PhysicsEngine/PhysicsConstraintComponent.h"
 #include "Components/SphereComponent.h"
 
+#include "Net/UnrealNetwork.h"
+
+void ASprungWheel::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const {
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ASprungWheel, ReplicatedLocation);
+}
+
 // Sets default values
 ASprungWheel::ASprungWheel() {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -65,6 +73,13 @@ void ASprungWheel::Tick(float DeltaTime) {
 	if (GetWorld()->TickGroup == TG_PostPhysics) {
 		TotalForceMagnitudeThisFrame = 0;
 	}
+
+	//if (HasAuthority()) {
+	//	ReplicatedLocation = GetActorLocation();
+	//}
+	//else {
+	//	SetActorLocation(ReplicatedLocation);
+	//}
 }
 
 void ASprungWheel::AddDrivingForce(float ForceMagnitude) {

@@ -25,6 +25,9 @@ private:
 
 	float TotalForceMagnitudeThisFrame = 0;
 
+	UPROPERTY(Replicated)
+		FVector ReplicatedLocation;
+
 //Functions
 public:	
 	ASprungWheel();
@@ -33,6 +36,7 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const;
 
 private:
 	void SetupConstraint();
